@@ -7,7 +7,7 @@ public class PressurePlate : MonoBehaviour
     private VerticalSlidingAnimation _verticalSlidingAnimation;
     private bool isActive = false;
     public float animationSpeed = 0.01f;
-    public float yPositionWhenDown = 0;
+    public float yPositionWhenDown = 0f;
     public GameObject targetObject;
     public GameObject secondTargetObject;
     public GameObject thirdTargetObject;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class VerticalSlidingAnimation : MonoBehaviour
 {
     private float yPositionWhenUp;
-    private float yPositionWhenDown = 0;
+    private float yPositionWhenDown = 0f;
     private float animationInterval = 0.01f;
     private float animationSpeed = 0.01f;
     private bool isAnimationRunning = false;
@@ -25,7 +25,7 @@ public class VerticalSlidingAnimation : MonoBehaviour
 
     void Awake()
     {
-        yPositionWhenUp = gameObject.transform.position.y;
+        yPositionWhenUp = gameObject.transform.localPosition.y;
     }
 
     public void Initialize(float _animationSpeed, float _yPositionWhenDown)
@@ -50,14 +50,15 @@ public class VerticalSlidingAnimation : MonoBehaviour
     {
         isAnimationRunning = true;
 
+        float currentY = gameObject.transform.localPosition.y;
         float targetY = movingDown ? yPositionWhenDown : yPositionWhenUp;
-        float currentY = gameObject.transform.position.y;
 
         while (isAnimationRunning)
         {
+            Vector3 currentPosition = gameObject.transform.localPosition;
             currentY += movingDown ? -animationSpeed : animationSpeed;
 
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, currentY, gameObject.transform.position.z);
+            gameObject.transform.localPosition = new Vector3(currentPosition.x, currentY, currentPosition.z);
 
             bool isTooFar = (movingDown && currentY < targetY) || (!movingDown && currentY > targetY);
 
@@ -68,7 +69,7 @@ public class VerticalSlidingAnimation : MonoBehaviour
 
                 if (isTooFar)
                 {
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, targetY, gameObject.transform.position.z);
+                    gameObject.transform.localPosition = new Vector3(currentPosition.x, targetY, currentPosition.z);
                 }
             }
 

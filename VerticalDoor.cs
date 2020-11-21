@@ -7,7 +7,7 @@ public class VerticalDoor : MonoBehaviour
     private VerticalSlidingAnimation _verticalSlidingAnimation;
 
     public float animationSpeed = 0.01f;
-    public float yPositionWhenDown = 0;
+    public float yPositionWhenDown = 0f;
 
     public void Awake()
     {
