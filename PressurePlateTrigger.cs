@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class PressurePlateTrigger : MonoBehaviour
 {
-    private PressurePlateBehavior pressurePlateBehavior;
+    private PressurePlate pressurePlate;
     public GameObject pressurePlateObject;
 
     void Awake()
     {
-        pressurePlateBehavior = pressurePlateObject.GetComponent<PressurePlateBehavior>();
+        pressurePlate = pressurePlateObject.GetComponent<PressurePlate>();
     }
 
     void OnTriggerEnter()
     {
-        pressurePlateBehavior.TogglePlate(true);
+        pressurePlate.Toggle(true);
     }
 
     void OnTriggerExit()
     {
-        pressurePlateBehavior.TogglePlate(false);
+        pressurePlate.Toggle(false);
     }
 }

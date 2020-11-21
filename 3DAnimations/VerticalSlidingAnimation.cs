@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class VerticalSlidingAnimation : MonoBehaviour
+public class VerticalSlidingAnimation : MonoBehaviour
 {
     private float yPositionWhenUp;
-    private bool isAnimationRunning = false;
-    private IEnumerator coroutine;
-    private bool _isDown = false;
+    private float yPositionWhenDown = 0;
     private float animationInterval = 0.01f;
-
-    public float animationSpeed = 0.01f;
-    public float yPositionWhenDown;
+    private float animationSpeed = 0.01f;
+    private bool isAnimationRunning = false;
+    private bool _isDown = false;
+    private IEnumerator coroutine;
 
     private bool IsDown
     {
@@ -20,17 +19,19 @@ public abstract class VerticalSlidingAnimation : MonoBehaviour
         {
             _isDown = value;
 
-            EndAnimation(value);
+            gameObject.SendMessage("EndAnimation", value, SendMessageOptions.DontRequireReceiver);
         }
     }
 
     void Awake()
     {
-        yPositionWhenUp = transform.position.y;
-        // animationInterval = (transform.localScale.y - yPositionWhenUp) / 5f;
+        yPositionWhenUp = gameObject.transform.position.y;
     }
 
-    public abstract void EndAnimation(bool isDown);
+    public void Initialize(float _animationSpeed, float _yPositionWhenDown) {
+        animationSpeed = _animationSpeed;
+        yPositionWhenDown = _yPositionWhenDown;
+    }
 
     public void StartAnimation(bool movingDown)
     {
@@ -49,13 +50,13 @@ public abstract class VerticalSlidingAnimation : MonoBehaviour
         isAnimationRunning = true;
 
         float targetY = movingDown ? yPositionWhenDown : yPositionWhenUp;
-        float currentY = transform.position.y;
+        float currentY = gameObject.transform.position.y;
 
         while (isAnimationRunning)
         {
             currentY += movingDown ? -animationSpeed : animationSpeed;
 
-            transform.position = new Vector3(transform.position.x, currentY, transform.position.z);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, currentY, gameObject.transform.position.z);
 
             bool isTooFar = (movingDown && currentY < targetY) || (!movingDown && currentY > targetY);
 
@@ -66,7 +67,7 @@ public abstract class VerticalSlidingAnimation : MonoBehaviour
 
                 if (isTooFar)
                 {
-                    transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, targetY, gameObject.transform.position.z);
                 }
             }
 
