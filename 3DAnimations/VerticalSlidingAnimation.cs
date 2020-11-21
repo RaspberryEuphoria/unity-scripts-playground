@@ -28,7 +28,8 @@ public class VerticalSlidingAnimation : MonoBehaviour
         yPositionWhenUp = gameObject.transform.position.y;
     }
 
-    public void Initialize(float _animationSpeed, float _yPositionWhenDown) {
+    public void Initialize(float _animationSpeed, float _yPositionWhenDown)
+    {
         animationSpeed = _animationSpeed;
         yPositionWhenDown = _yPositionWhenDown;
     }
