@@ -6,8 +6,8 @@ public enum Direction { Left, Right, Up, Down }
 
 public class SlidingAnimation : MonoBehaviour
 {
-    private string axis;
-    private float defaultAxisValue;
+    private int axis;
+    private float initialAxisValue;
     private float targetAxisValue = 0f;
     private float animationInterval = 0.01f;
     private float animationSpeed = 0.01f;
@@ -23,7 +23,7 @@ public class SlidingAnimation : MonoBehaviour
         {
             _isInPosition = value;
 
-            gameObject.SendMessage("EndAnimation", value, SendMessageOptions.DontRequireReceiver);
+            gameObject.SendMessage("SlidingAnimationDone", _isInPosition, SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -34,7 +34,7 @@ public class SlidingAnimation : MonoBehaviour
         direction = _direction;
 
         axis = getAxisByDirection(direction);
-        defaultAxisValue = getAxisValueFromPosition(gameObject.transform.localPosition);
+        initialAxisValue = gameObject.transform.localPosition[axis];
     }
 
     public void StartAnimation(bool movingToDirection)
@@ -49,25 +49,18 @@ public class SlidingAnimation : MonoBehaviour
         StartCoroutine(coroutine);
     }
 
-    private string getAxisByDirection(Direction direction) {
+    private int getAxisByDirection(Direction direction)
+    {
         switch (direction)
         {
             case Direction.Left:
             case Direction.Right:
-                return "x";
+                return 0;
             case Direction.Up:
             case Direction.Down:
             default:
-                return "y";
+                return 1;
         }
-    }
-
-    private float getAxisValueFromPosition(Vector3 position) {
-        if (axis == "x") {
-            return position.x;
-        }
-
-        return position.y;
     }
 
     private IEnumerator AnimateSliding(bool movingToDirection)
@@ -75,8 +68,9 @@ public class SlidingAnimation : MonoBehaviour
         isAnimationRunning = true;
 
         Vector3 currentPosition = gameObject.transform.localPosition;
-        float axisValue = getAxisValueFromPosition(currentPosition);
-        float targetValue = movingToDirection ? targetAxisValue : defaultAxisValue;
+
+        float axisValue = currentPosition[axis];
+        float targetValue = movingToDirection ? targetAxisValue : initialAxisValue;
 
         while (isAnimationRunning)
         {
@@ -90,7 +84,8 @@ public class SlidingAnimation : MonoBehaviour
                 IsInPosition = movingToDirection;
                 isAnimationRunning = false;
 
-                if (isTooFar) {
+                if (isTooFar)
+                {
                     gameObject.transform.localPosition = updatePosition(currentPosition, targetValue);
                 }
             }
@@ -99,10 +94,12 @@ public class SlidingAnimation : MonoBehaviour
         }
     }
 
-    private float updateAxisValue(bool movingToDirection, float axisValue) {
+    private float updateAxisValue(bool movingToDirection, float axisValue)
+    {
         float speed = movingToDirection ? animationSpeed : -animationSpeed;
 
-        switch (direction) {
+        switch (direction)
+        {
             case Direction.Right:
             case Direction.Up:
                 axisValue += speed;
@@ -117,17 +114,22 @@ public class SlidingAnimation : MonoBehaviour
         return axisValue;
     }
 
-    private Vector3 updatePosition(Vector3 position, float axisValue) {
-        if (axis == "x") {
+    private Vector3 updatePosition(Vector3 position, float axisValue)
+    {
+        if (axis == 0)
+        {
             return new Vector3(axisValue, position.y, position.z);
         }
 
         return new Vector3(position.x, axisValue, position.z);
     }
 
-    private bool checkIfTooFar(bool movingToDirection, float axisValue, float targetValue) {
-        if (movingToDirection) {
-            switch (direction) {
+    private bool checkIfTooFar(bool movingToDirection, float axisValue, float targetValue)
+    {
+        if (movingToDirection)
+        {
+            switch (direction)
+            {
                 case Direction.Right:
                 case Direction.Up:
                     return axisValue > targetValue;
@@ -138,7 +140,8 @@ public class SlidingAnimation : MonoBehaviour
             }
         }
 
-        switch (direction) {
+        switch (direction)
+        {
             case Direction.Right:
             case Direction.Up:
                 return axisValue < targetValue;
