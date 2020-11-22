@@ -51,6 +51,8 @@ public class SlidingAnimation : MonoBehaviour
 
     private int getAxisByDirection(Direction direction)
     {
+        // In a Vector3 position, 0 = "x" and 1 = "y"
+
         switch (direction)
         {
             case Direction.Left:
@@ -74,8 +76,8 @@ public class SlidingAnimation : MonoBehaviour
 
         while (isAnimationRunning)
         {
-            axisValue = updateAxisValue(movingToDirection, axisValue);
-            gameObject.transform.localPosition = updatePosition(currentPosition, axisValue);
+            axisValue = getNextAxisValue(movingToDirection, axisValue);
+            gameObject.transform.localPosition = getNextPosition(currentPosition, axisValue);
 
             bool isTooFar = checkIfTooFar(movingToDirection, axisValue, targetValue);
 
@@ -86,7 +88,7 @@ public class SlidingAnimation : MonoBehaviour
 
                 if (isTooFar)
                 {
-                    gameObject.transform.localPosition = updatePosition(currentPosition, targetValue);
+                    gameObject.transform.localPosition = getNextPosition(currentPosition, targetValue);
                 }
             }
 
@@ -94,7 +96,7 @@ public class SlidingAnimation : MonoBehaviour
         }
     }
 
-    private float updateAxisValue(bool movingToDirection, float axisValue)
+    private float getNextAxisValue(bool movingToDirection, float axisValue)
     {
         float speed = movingToDirection ? animationSpeed : -animationSpeed;
 
@@ -114,41 +116,26 @@ public class SlidingAnimation : MonoBehaviour
         return axisValue;
     }
 
-    private Vector3 updatePosition(Vector3 position, float axisValue)
+    private Vector3 getNextPosition(Vector3 position, float axisValue)
     {
-        if (axis == 0)
-        {
-            return new Vector3(axisValue, position.y, position.z);
-        }
-
-        return new Vector3(position.x, axisValue, position.z);
+        position[axis] = axisValue;
+        return position;
     }
 
     private bool checkIfTooFar(bool movingToDirection, float axisValue, float targetValue)
     {
-        if (movingToDirection)
-        {
-            switch (direction)
-            {
-                case Direction.Right:
-                case Direction.Up:
-                    return axisValue > targetValue;
-                case Direction.Left:
-                case Direction.Down:
-                default:
-                    return axisValue < targetValue;
-            }
-        }
+        float value1 = movingToDirection ? axisValue : targetValue;
+        float value2 = movingToDirection ? targetAxisValue : axisValue;
 
         switch (direction)
         {
             case Direction.Right:
             case Direction.Up:
-                return axisValue < targetValue;
+                return value1 > value2;
             case Direction.Left:
             case Direction.Down:
             default:
-                return axisValue > targetValue;
+                return value1 < value2;
         }
     }
 }
