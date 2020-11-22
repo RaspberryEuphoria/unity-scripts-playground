@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class VerticalDoor : MonoBehaviour
 {
-    private VerticalSlidingAnimation _verticalSlidingAnimation;
+    private SlidingAnimation _slidingAnimation;
 
     public float animationSpeed = 0.01f;
     public float yPositionWhenDown = 0f;
+    public Direction direction;
 
     public void Awake()
     {
-        _verticalSlidingAnimation = gameObject.AddComponent<VerticalSlidingAnimation>();
-        _verticalSlidingAnimation.Initialize(animationSpeed, yPositionWhenDown);
+        _slidingAnimation = gameObject.AddComponent<SlidingAnimation>();
+        _slidingAnimation.Initialize(animationSpeed, yPositionWhenDown, direction);
     }
 
     public void Trigger(bool isMovingDown)
     {
-        _verticalSlidingAnimation.StartAnimation(isMovingDown);
+        _slidingAnimation.StartAnimation(isMovingDown);
     }
 
 }

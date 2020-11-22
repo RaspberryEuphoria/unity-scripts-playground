@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
-    private VerticalSlidingAnimation _verticalSlidingAnimation;
+    private SlidingAnimation _slidingAnimation;
     private bool isActive = false;
 
     public float animationSpeed = 0.01f;
@@ -13,8 +13,8 @@ public class PressurePlate : MonoBehaviour
 
     public void Awake()
     {
-        _verticalSlidingAnimation = gameObject.AddComponent<VerticalSlidingAnimation>();
-        _verticalSlidingAnimation.Initialize(animationSpeed, yPositionWhenDown);
+        _slidingAnimation = gameObject.AddComponent<SlidingAnimation>();
+        _slidingAnimation.Initialize(animationSpeed, yPositionWhenDown);
     }
 
     public void EndAnimation(bool isDown)
@@ -29,6 +29,6 @@ public class PressurePlate : MonoBehaviour
 
     public void Toggle(bool isEntering)
     {
-        _verticalSlidingAnimation.StartAnimation(isEntering);
+        _slidingAnimation.StartAnimation(isEntering);
     }
 }
