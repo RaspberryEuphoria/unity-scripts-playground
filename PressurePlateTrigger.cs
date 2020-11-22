@@ -5,11 +5,10 @@ using UnityEngine;
 public class PressurePlateTrigger : MonoBehaviour
 {
     private PressurePlate pressurePlate;
-    public GameObject pressurePlateObject;
 
     void Awake()
     {
-        pressurePlate = pressurePlateObject.GetComponent<PressurePlate>();
+        pressurePlate = transform.parent.gameObject.GetComponent<PressurePlate>();
     }
 
     void OnTriggerEnter()
