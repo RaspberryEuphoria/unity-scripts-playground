@@ -12,7 +12,7 @@ public class PressurePlate : MonoBehaviour
     public float yPositionWhenSlidedDown = 0f;
 
     [Header("Trigger Settings")]
-    [Tooltip("These objects will be trigger when the pressure plate is activated")]
+    [Tooltip("These objects will receive a trigger when the pressure plate is activated")]
     public List<GameObject> targetObjects = new List<GameObject>();
 
     public void Awake()
@@ -27,12 +27,12 @@ public class PressurePlate : MonoBehaviour
 
         foreach (GameObject target in targetObjects)
         {
-            target.SendMessage("Trigger", isActive);
+            target.SendMessage("ReceiveTrigger", isActive);
         }
     }
 
-    public void Toggle(bool isEntering)
+    public void Toggle(bool isSteppedOn)
     {
-        _slidingAnimation.StartAnimation(isEntering);
+        _slidingAnimation.StartAnimation(isSteppedOn);
     }
 }

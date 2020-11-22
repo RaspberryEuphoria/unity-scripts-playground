@@ -18,9 +18,9 @@ public class SlidingDoor : MonoBehaviour
         _slidingAnimation.Initialize(animationSpeed, positionWhenSlided, direction);
     }
 
-    public void Trigger(bool isMovingDown)
+    public void ReceiveTrigger(bool isActive)
     {
-        _slidingAnimation.StartAnimation(isMovingDown);
+        _slidingAnimation.StartAnimation(isActive);
     }
 
 }
