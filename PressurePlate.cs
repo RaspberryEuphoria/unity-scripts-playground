@@ -23,11 +23,13 @@ public class PressurePlate : MonoBehaviour
 
     public void SlidingAnimationDone(bool isDown)
     {
-        isActive = isDown;
+        if (isActive != isDown) {
+            isActive = isDown;
 
-        foreach (GameObject target in targetObjects)
-        {
-            target.SendMessage("ReceiveTrigger", isActive);
+            foreach (GameObject target in targetObjects)
+            {
+                target.SendMessage("ReceiveTrigger", isActive);
+            }
         }
     }
 
